@@ -1,0 +1,4 @@
+repository "isometric-demo@ziszle@cloud"
+  path "/"
+    br "/main"
+    co "/main"
