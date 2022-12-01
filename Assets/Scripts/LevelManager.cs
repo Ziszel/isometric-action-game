@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // every ten seconds change the state of the game
-enum Cycle {
+public enum Cycle {
     Day = 0,
     Night = 1
 }
@@ -11,8 +11,9 @@ enum Cycle {
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance; // static ensures there can be only one
-    private Cycle cycle;
-    private float timer = 2.0f; // seconds
+    public Cycle cycle;
+    public float tenSeconds;
+    private float timer; // seconds
     
     private void Awake()
     {
@@ -27,31 +28,23 @@ public class LevelManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject); // don't destroy the empty game object when loading a new scene
 
+        tenSeconds = 10.0f;
+        timer = tenSeconds;
         cycle = Cycle.Day;
-        
     }
 
     // Update is called once per frame
     private void Update()
     {
-        timer -= Time.deltaTime;
-
-        if (timer == 0)
+        if (timer <= 0.0f)
         {
-            if (cycle == Cycle.Day)
-            {
-                cycle = Cycle.Night;
-            }
-            else if (cycle == Cycle.Night)
-            {
-                cycle = Cycle.Day;
-            }
-            Debug.Log(cycle);
+            cycle = UpdateState(cycle);
+            timer = tenSeconds;
         }
 
-        Debug.Log(timer);
+        timer -= Time.deltaTime;
         // In here, use a FSM to manage the states of the scene: explore, in-battle, dead, etc...
-        
+
     }
 
     // public as will need to be called by Player when they die, and a collision zone trigger at end of level
@@ -59,6 +52,20 @@ public class LevelManager : MonoBehaviour
     public void Reset()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private Cycle UpdateState(Cycle cycle)
+    {
+        if (cycle == Cycle.Day)
+        {
+            cycle = Cycle.Night;
+        }
+        else if (cycle == Cycle.Night)
+        {
+            cycle = Cycle.Day;
+        }
+
+        return cycle;
     }
     
 }
