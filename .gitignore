@@ -73,3 +73,6 @@ crashlytics-build.properties
 
 # Jetbrains IDE config files
 /.idea/
+
+# Git specific Windows config
+/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
