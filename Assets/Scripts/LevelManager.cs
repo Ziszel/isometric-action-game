@@ -1,10 +1,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// every ten seconds change the state of the game
+enum Cycle {
+    Day = 0,
+    Night = 1
+}
+
 // Cannot call class 'SceneManager' as that is a built-in Unity class
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance; // static ensures there can be only one
+    private Cycle cycle;
+    private float timer = 2.0f; // seconds
     
     private void Awake()
     {
@@ -18,12 +26,30 @@ public class LevelManager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject); // don't destroy the empty game object when loading a new scene
+
+        cycle = Cycle.Day;
         
     }
 
     // Update is called once per frame
     private void Update()
     {
+        timer -= Time.deltaTime;
+
+        if (timer == 0)
+        {
+            if (cycle == Cycle.Day)
+            {
+                cycle = Cycle.Night;
+            }
+            else if (cycle == Cycle.Night)
+            {
+                cycle = Cycle.Day;
+            }
+            Debug.Log(cycle);
+        }
+
+        Debug.Log(timer);
         // In here, use a FSM to manage the states of the scene: explore, in-battle, dead, etc...
         
     }
