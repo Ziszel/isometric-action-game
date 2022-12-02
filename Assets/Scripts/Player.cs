@@ -4,8 +4,12 @@ public class Player : MonoBehaviour
 {
     public Rigidbody rb;
     public Transform wall;
-    private float _speed = 1000;
-    private float _rotationSpeed = 5;
+    [Header("PlayerProperties")]
+    [SerializeField]private float _speed = 1000.0f;
+    [SerializeField]private float _rotationSpeed = 5.0f;
+    [SerializeField]private float _jumpForce = 100.0f;
+
+    private bool _canJump = true;
 
     // FixedUpdate() over Update as I am working with physics
     void FixedUpdate()
@@ -13,11 +17,20 @@ public class Player : MonoBehaviour
         float zMovement = Input.GetAxisRaw("Vertical") * _speed;
         float hMovement = Input.GetAxisRaw("Horizontal") * _speed;
 
+        // moving specific, if the player is trying to move (axis down) and they are NOT in the air
         if (zMovement != 0 || hMovement != 0)
         {
             MovePlayer(zMovement, hMovement);
             RotatePlayer(zMovement, hMovement);
         }
+        // Jumping specific
+        if (Input.GetKey(KeyCode.Space) && _canJump)
+        {
+            PlayerJump();
+        }
+
+        // if player is on the ground then make it so they can jump again
+        if (transform.position.y == 1) { _canJump = true; }
     }
 
     void MovePlayer(float zMovement, float hMovement)
@@ -58,5 +71,12 @@ public class Player : MonoBehaviour
         // https://forum.unity.com/threads/how-quaternion-lookrotation-works.985800/
         // https://docs.unity3d.com/ScriptReference/Quaternion.LookRotation.html
         transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (movement), _rotationSpeed * Time.deltaTime);
+    }
+
+    void PlayerJump()
+    {
+        // https://docs.unity3d.com/ScriptReference/Vector3-up.html
+        rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+        _canJump = false;
     }
 }
