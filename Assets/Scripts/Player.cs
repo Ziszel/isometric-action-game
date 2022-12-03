@@ -1,39 +1,47 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public Rigidbody rb;
     public Transform wall;
+    // https://docs.unity3d.com/Manual/script-Serialization.html
+    // https://docs.unity3d.com/ScriptReference/SerializeField.html
+    // [SerializeField] allows Unity to serialize private fields
+    // Serializing allows editing in the inspector among other things
     [Header("PlayerProperties")]
     [SerializeField]private float _speed = 1000.0f;
     [SerializeField]private float _rotationSpeed = 5.0f;
-    [SerializeField]private float _jumpForce = 100.0f;
+    [SerializeField]private float _jumpForce = 500.0f;
+    [SerializeField]private float fallMultiplier = 1.5f;
+    [SerializeField]private float lowJumpMultiplier = 1.2f;
 
-    private bool _canJump = true;
+    private bool onGround = true;
+
+    private void Awake()
+    {
+        rb = this.GetComponent<Rigidbody>();
+    }
 
     // FixedUpdate() over Update as I am working with physics
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         float zMovement = Input.GetAxisRaw("Vertical") * _speed;
         float hMovement = Input.GetAxisRaw("Horizontal") * _speed;
 
-        // moving specific, if the player is trying to move (axis down) and they are NOT in the air
+        // if the player is trying to move (axis down), update the velocity on X and Z axis
         if (zMovement != 0 || hMovement != 0)
         {
             MovePlayer(zMovement, hMovement);
             RotatePlayer(zMovement, hMovement);
         }
-        // Jumping specific
-        if (Input.GetKey(KeyCode.Space) && _canJump)
-        {
-            PlayerJump();
-        }
-
-        // if player is on the ground then make it so they can jump again
-        if (transform.position.y == 1) { _canJump = true; }
+        //this.transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * 10.0f * Time.deltaTime);
+        //this.transform.Translate(Vector3.forward * Input.GetAxis("Vertical") * 10.0f * Time.deltaTime);
+        
+        HandleJumping();
     }
 
-    void MovePlayer(float zMovement, float hMovement)
+    private void MovePlayer(float zMovement, float hMovement)
     {
         // I have set constraints on the X and Z axis to stop the player from falling over when moving forward
         // https://forum.unity.com/threads/character-falling-over-problem.160027/
@@ -42,7 +50,7 @@ public class Player : MonoBehaviour
             // I have previously adjusted the rb.velocity directly by using rb.velocity = transform.forward / left * speed
             // This was resulting in issues moving relative to the camera setup in the scene.
             // To fix this, I now add a force directly to the players vector along either the z (vertical) or x(horizontal) axis
-            // This keeps the rotation and movement independant of one another
+            // This keeps the rotation and movement independent of one another
             rb.AddForce(0.0f, 0.0f, _speed); // move backwards
         }
         else if (zMovement < 0)
@@ -60,7 +68,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void RotatePlayer(float zMovement, float hMovement)
+    private void RotatePlayer(float zMovement, float hMovement)
     {
         // Get the direction the player is moving in (using GetAxisRaw will always return a normalised value already)
         Vector3 movement = new Vector3(hMovement, 0.0f, zMovement);
@@ -73,10 +81,46 @@ public class Player : MonoBehaviour
         transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (movement), _rotationSpeed * Time.deltaTime);
     }
 
-    void PlayerJump()
+    private void PlayerJump()
     {
         // https://docs.unity3d.com/ScriptReference/Vector3-up.html
+        // rb.Addforce(Vector3.up * _jumpForce, ForceMode.Impulse) was my initial attempt for the jump. Whilst this jump
+        // is physics accurate, it feels bad and so I searched for a better way to implement this
+        // https://www.youtube.com/watch?v=7KiK0Aqtmzc
+        onGround = false;
         rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
-        _canJump = false;
+    }
+    
+    private void HandleJumping()
+    {
+        if (Input.GetKey(KeyCode.Space) && onGround)
+        {
+            PlayerJump();
+        }
+
+        // If the player is falling, apply the multiplier to make them fall faster
+        if (rb.velocity.y < 0)
+        {
+            // The first code snippet below is in-efficient due to order of multiplication:
+            // https://manuelotheo.com/on-optimization-order-of-multiplication-operations-is-inefficient/
+            // rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1);
+            // The extra parenthesis ensures 
+            rb.velocity += Vector3.up * (Physics.gravity.y * (fallMultiplier - 1));
+        }
+
+        if (rb.velocity.y > 0)
+        {
+            rb.velocity += Vector3.up * (Physics.gravity.y * (lowJumpMultiplier - 1));
+        }
+    }
+
+    private void OnCollisionStay(Collision collisionInfo)
+    {
+        onGround = true;
+    }
+    
+    private void OnCollisionExit(Collision collisionInfo)
+    {
+        onGround = false;
     }
 }
