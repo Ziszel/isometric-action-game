@@ -14,6 +14,5 @@ public class EndOfLevel : MonoBehaviour
             Debug.Log("you have won");
             FindObjectOfType<LevelManager>().Reset();
         }
-        Debug.Log("you have lost"); 
     }
 }

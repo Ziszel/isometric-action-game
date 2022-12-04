@@ -31,8 +31,8 @@ public class Player : MonoBehaviour
         // if the player is trying to move (axis down), update the velocity on X and Z axis
         if (zMovement != 0 || hMovement != 0)
         {
-            MovePlayer(zMovement, hMovement);
-            RotatePlayer(zMovement, hMovement);
+            MovePlayer(-zMovement, -hMovement);
+            RotatePlayer(-zMovement, -hMovement);
         }
 
         HandleJumping();
