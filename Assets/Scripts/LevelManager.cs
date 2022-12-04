@@ -13,8 +13,9 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance; // static ensures there can be only one
     public Cycle cycle;
     public float tenSeconds;
+    public bool playerHasFlower;
     private float timer; // seconds
-    
+
     private void Awake()
     {
         // If we already have an instance, we don't want another gameObject.
@@ -31,6 +32,7 @@ public class LevelManager : MonoBehaviour
         tenSeconds = 10.0f;
         timer = tenSeconds;
         cycle = Cycle.Day;
+        playerHasFlower = true;
     }
 
     // Update is called once per frame
