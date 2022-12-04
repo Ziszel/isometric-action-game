@@ -11,9 +11,9 @@ public enum Cycle {
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager instance; // static ensures there can be only one
+    public bool playerHasFlower;
     public Cycle cycle;
     public float tenSeconds;
-    public bool playerHasFlower;
     private float timer; // seconds
 
     private void Awake()
@@ -32,7 +32,7 @@ public class LevelManager : MonoBehaviour
         tenSeconds = 10.0f;
         timer = tenSeconds;
         cycle = Cycle.Day;
-        playerHasFlower = true;
+        playerHasFlower = false;
     }
 
     // Update is called once per frame
@@ -43,7 +43,7 @@ public class LevelManager : MonoBehaviour
             cycle = UpdateState(cycle);
             timer = tenSeconds;
         }
-
+        
         timer -= Time.deltaTime;
         // In here, use a FSM to manage the states of the scene: explore, in-battle, dead, etc...
 
@@ -53,6 +53,7 @@ public class LevelManager : MonoBehaviour
     // will be split out into 'PlayerDead' & 'LevelComplete' methods eventually
     public void Reset()
     {
+        playerHasFlower = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
