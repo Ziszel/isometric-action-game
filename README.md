@@ -5,11 +5,11 @@ A 3D, isometric action game created in Unity for university.
 ## Team members
 
 - Calin Clement O'Ceallaigh (https://ziszle.itch.io/)
-- information pending
+- XinRan Cheng (https://xinrancheng.itch.io/)
 
 ## About the game
 
-Description pending
+Guide the player to the flower!
 
 ## How to play
 
