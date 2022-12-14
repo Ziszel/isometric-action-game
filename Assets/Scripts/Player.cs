@@ -161,6 +161,9 @@ public class Player : MonoBehaviour
             _jumpCount = 0;
         }
         // If the player hits a TerrainWall then make sure they cannot jump again, send them into the ocean!
+        // Originally I used this in conjunction with a physics material on the walls to stop the player sticking
+        // https://www.youtube.com/watch?v=fmGdDzKuJVk this video showed me that by putting the material on the player
+        // I can stop the sticking on ALL walls, and objects!
         else if(collisionInfo.collider.CompareTag("TerrainWall"))
         {
             _jumpCount = 2;

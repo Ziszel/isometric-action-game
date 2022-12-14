@@ -109,7 +109,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2576986071091620774}
   serializedVersion: 2
-  m_Mass: 10
+  m_Mass: 2
   m_Drag: 3
   m_AngularDrag: 20
   m_UseGravity: 1
@@ -130,9 +130,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 2576986071091620779}
-  speed: 1000
+  speed: 200
   rotationSpeed: 5
-  jumpForce: 500
+  jumpForce: 125
   fallMultiplier: 1.5
   lowJumpMultiplier: 1.2
   doubleJumpTimer: 0
