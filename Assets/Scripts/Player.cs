@@ -154,10 +154,16 @@ public class Player : MonoBehaviour
     // therefore if the player is not in the air or has hit a wall, set onGround to true allowing them to jump again
     private void OnCollisionStay(Collision collisionInfo)
     {
+        // If the player collides with the ground (or walls not tagged with TerrainWall, allow them to junmp again!)
         if(!collisionInfo.collider.CompareTag("TerrainWall"))
         {
             _onGround = true;
             _jumpCount = 0;
+        }
+        // If the player hits a TerrainWall then make sure they cannot jump again, send them into the ocean!
+        else if(collisionInfo.collider.CompareTag("TerrainWall"))
+        {
+            _jumpCount = 2;
         }
     }
     
