@@ -14,14 +14,33 @@ public class Player : MonoBehaviour
     [SerializeField]private float jumpForce = 500.0f;
     [SerializeField]private float fallMultiplier = 1.5f;
     [SerializeField]private float lowJumpMultiplier = 1.2f;
+    [SerializeField]private float doubleJumpTimer;
 
     private bool _onGround = true;
     private int _jumpCount;
+    private bool _jumpPressed;
 
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
         _jumpCount = 0; // set _jumpCount to 0 here just in-case player was mid-air at end of previous level.
+        _jumpPressed = false;
+        ResetJumpTimer();
+    }
+
+    private void Update()
+    {
+        //https://stackoverflow.com/questions/51958042/c-sharp-unity-getkeydown-not-being-detected-properly
+        // GetKeyDown is detected every frame, therefore FixedUpdate (frame independent due to physics)
+        // will not be detected correctly, and is thus called here.
+        // HOWEVER, jumping is done through physics, so this is called first to capture input and then that is used
+        // inside of FixedUpdate, phew!
+        //HandleJumping();
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            _jumpPressed = true;
+        }
+
     }
 
     // FixedUpdate() over Update as I am working with physics
@@ -36,8 +55,9 @@ public class Player : MonoBehaviour
             MovePlayer(-zMovement, -hMovement);
             RotatePlayer(-zMovement, -hMovement);
         }
-
-        HandleJumping();
+    
+        HandleJumping(_jumpPressed);
+        _jumpPressed = false;
     }
 
     private void MovePlayer(float zMovement, float hMovement)
@@ -86,16 +106,27 @@ public class Player : MonoBehaviour
         // rb.Addforce(Vector3.up * _jumpForce, ForceMode.Impulse) was my initial attempt for the jump. Whilst this jump
         // is physics accurate, it feels bad and so I searched for a better way to implement this
         // https://www.youtube.com/watch?v=7KiK0Aqtmzc
-        _onGround = false;
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if (_jumpCount < 2)
+        {
+            _onGround = false;
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            _jumpCount += 1;
+            Debug.Log("jumping");
+        }
+        else
+        {
+            Debug.Log("max jumps reached");
+            return;
+        }
     }
     
-    private void HandleJumping()
+    private void HandleJumping(bool _jumpPressed)
     {
-        if (Input.GetKey(KeyCode.Space) && _jumpCount < 2)
+        // Triggering inconsistently
+        if (_jumpPressed)
         {
+            // onGround is not the problem
             PlayerJump();
-            _jumpCount += 1;
         }
 
         // If the player is falling, apply the multiplier to make them fall faster
@@ -112,6 +143,12 @@ public class Player : MonoBehaviour
         {
             rb.velocity += Vector3.up * (Physics.gravity.y * (lowJumpMultiplier - 1));
         }
+
+        if(!_onGround && doubleJumpTimer != 0)
+        {
+            doubleJumpTimer -= Time.deltaTime;
+            if (doubleJumpTimer < 0) { doubleJumpTimer = 0.0f; }
+        }
     }
 
     // called once per frame for each collider or RB that touches another
@@ -127,5 +164,10 @@ public class Player : MonoBehaviour
     private void OnCollisionExit(Collision collisionInfo)
     {
         _onGround = false;
+    }
+
+    private void ResetJumpTimer()
+    {
+        doubleJumpTimer = 0.5f;
     }
 }
