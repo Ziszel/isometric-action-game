@@ -16,10 +16,12 @@ public class Player : MonoBehaviour
     [SerializeField]private float lowJumpMultiplier = 1.2f;
 
     private bool _onGround = true;
+    private int _jumpCount;
 
     private void Awake()
     {
         rb = this.GetComponent<Rigidbody>();
+        _jumpCount = 0; // set _jumpCount to 0 here just in-case player was mid-air at end of previous level.
     }
 
     // FixedUpdate() over Update as I am working with physics
@@ -90,9 +92,10 @@ public class Player : MonoBehaviour
     
     private void HandleJumping()
     {
-        if (Input.GetKey(KeyCode.Space) && _onGround)
+        if (Input.GetKey(KeyCode.Space) && _jumpCount < 2)
         {
             PlayerJump();
+            _jumpCount += 1;
         }
 
         // If the player is falling, apply the multiplier to make them fall faster
@@ -116,6 +119,7 @@ public class Player : MonoBehaviour
     private void OnCollisionStay(Collision collisionInfo)
     {
         _onGround = true;
+        _jumpCount = 0;
     }
     
     // Used as supplemental to above, just in-case the player falls off a ledge instead of jumps make sure they can't
