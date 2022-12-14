@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
         {
             _jumpPressed = true;
         }
+        Debug.Log("jumps: " + _jumpCount);
 
     }
 
@@ -106,16 +107,14 @@ public class Player : MonoBehaviour
         // rb.Addforce(Vector3.up * _jumpForce, ForceMode.Impulse) was my initial attempt for the jump. Whilst this jump
         // is physics accurate, it feels bad and so I searched for a better way to implement this
         // https://www.youtube.com/watch?v=7KiK0Aqtmzc
-        if (_jumpCount < 2)
+        if (_jumpCount < 1)
         {
             _onGround = false;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             _jumpCount += 1;
-            Debug.Log("jumping");
         }
         else
         {
-            Debug.Log("max jumps reached");
             return;
         }
     }
@@ -155,8 +154,11 @@ public class Player : MonoBehaviour
     // therefore if the player is not in the air or has hit a wall, set onGround to true allowing them to jump again
     private void OnCollisionStay(Collision collisionInfo)
     {
-        _onGround = true;
-        _jumpCount = 0;
+        if(!collisionInfo.collider.CompareTag("TerrainWall"))
+        {
+            _onGround = true;
+            _jumpCount = 0;
+        }
     }
     
     // Used as supplemental to above, just in-case the player falls off a ledge instead of jumps make sure they can't

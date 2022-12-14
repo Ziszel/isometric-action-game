@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18044698, g: 0.22590943, b: 0.30701706, a: 1}
+  m_IndirectSpecularColor: {r: 0.18044646, g: 0.22590823, b: 0.30701518, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3542,9 +3542,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terrain02
       objectReference: {fileID: 0}
+    - target: {fileID: 4428938425344598396, guid: bf3d010780aefda4f8589a41b807ad2f, type: 3}
+      propertyPath: m_TagString
+      value: TerrainWall
+      objectReference: {fileID: 0}
     - target: {fileID: 6048768654505110498, guid: bf3d010780aefda4f8589a41b807ad2f, type: 3}
       propertyPath: m_RootOrder
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6048768654505110498, guid: bf3d010780aefda4f8589a41b807ad2f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6048768654505110498, guid: bf3d010780aefda4f8589a41b807ad2f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3586,6 +3594,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8650711600719505648, guid: bf3d010780aefda4f8589a41b807ad2f, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: d3218002b62d94817b7ce4bd13dc154d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf3d010780aefda4f8589a41b807ad2f, type: 3}
 --- !u!1001 &5302412092452694083
