@@ -22,7 +22,7 @@ public class MainCamera : MonoBehaviour
     private void LateUpdate()
     {
         // Get the mouse in a similar way to buttons/keys and set the pitch relevant to the movement of the mouse
-        pitch -= rotationSpeed * Input.GetAxis("Mouse X");
+        pitch += rotationSpeed * Input.GetAxis("Mouse X");
 
         // Update the camera position to track the player, and rotate around the player
         transform.position = (Player.transform.position + _offset);

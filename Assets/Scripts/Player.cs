@@ -1,9 +1,9 @@
-using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public Rigidbody rb;
+    public Camera mainCamera;
     // https://docs.unity3d.com/Manual/script-Serialization.html
     // https://docs.unity3d.com/ScriptReference/SerializeField.html
     // [SerializeField] allows Unity to serialize private fields
@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
         _jumpCount = 0; // set _jumpCount to 0 here just in-case player was mid-air at end of previous level.
         _jumpPressed = false;
         ResetJumpTimer();
+        mainCamera = Camera.main;
     }
 
     private void Update()
@@ -40,7 +41,6 @@ public class Player : MonoBehaviour
         {
             _jumpPressed = true;
         }
-        Debug.Log("jumps: " + _jumpCount);
 
     }
 
@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
         if (zMovement != 0 || hMovement != 0)
         {
             MovePlayer(-zMovement, -hMovement);
-            RotatePlayer(-zMovement, -hMovement);
+            RotatePlayer();
         }
     
         HandleJumping(_jumpPressed);
@@ -71,34 +71,43 @@ public class Player : MonoBehaviour
             // This was resulting in issues moving relative to the camera setup in the scene.
             // To fix this, I now add a force directly to the players vector along either the z (vertical) or x(horizontal) axis
             // This keeps the rotation and movement independent of one another
-            rb.AddForce(0.0f, 0.0f, speed); // move backwards
+            // rb.AddForce(0.0f, 0.0f, speed); // move backwards
+            // After adding in camera movement, the player must now move in relation to where the camera is looking. That
+            // is what the multiplying the movement speed by the camera's transform is doing
+            // https://forum.unity.com/threads/solved-moving-object-in-the-direction-of-camera-view.30330/
+            rb.AddForce(mainCamera.transform.forward * -speed);
         }
         else if (zMovement < 0)
         {
-            rb.AddForce(0.0f, 0.0f, -speed); // move forward
+            rb.AddForce(mainCamera.transform.forward * speed); // move forward
         }
         
         if (hMovement > 0)
         {
-            rb.AddForce(speed, 0.0f, 0.0f); // move Right
+            rb.AddForce(mainCamera.transform.right * -speed); // move Right
         }
         else if (hMovement < 0)
         {
-            rb.AddForce(-speed, 0.0f, 0.0f); // move Left
+            rb.AddForce(mainCamera.transform.right * speed); // move Left
         }
     }
 
-    private void RotatePlayer(float zMovement, float hMovement)
+    private void RotatePlayer()
     {
-        // Get the direction the player is moving in (using GetAxisRaw will always return a normalised value already)
-        Vector3 movement = new Vector3(hMovement, 0.0f, zMovement);
+        // PREVIOUS, when camera didn't move!
+        // Get the direction the player is moving in (zMovement / hMovement)
+        //new Vector3(hMovement, 0.0f, zMovement);
         
+        // Previous code only rotated player from single camera perspective, but with the camera moving this now looks wrong!
+        // rotating with velocity ensures the right angle is captured!
+        Vector3 movement = new Vector3(rb.velocity.x, 0.0f, rb.velocity.z);
+
         // spherical lerp from the current rotation to the angle the player is attempting to move to
         // slerp treats a vector like a direction rather than a position which is perfect for working with rotations
         // https://www.reddit.com/r/Unity3D/comments/6iskah/movetowards_vs_lerp_vs_slerp_vs_smoothdamp/
         // https://forum.unity.com/threads/how-quaternion-lookrotation-works.985800/
         // https://docs.unity3d.com/ScriptReference/Quaternion.LookRotation.html
-        transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (movement), rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation (movement), rotationSpeed * Time.deltaTime);
     }
 
     private void PlayerJump()
