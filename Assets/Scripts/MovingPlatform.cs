@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum Direction
@@ -59,5 +60,27 @@ public class MovingPlatform : MonoBehaviour
         // move the platform by a unit vector * our moveSpeed to world space right
         // Because no physics are involved we MUST use Time.deltaTime
         platformTransform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // If the player hits the platform, set its parent to the transform of this object (child of moving platform,
+        // which automatically moves with its parent)
+        // Made the 'empty' top level game object have the Box Collider instead as its not intended to pass collisions UP
+        // the hierarchy (https://stackoverflow.com/questions/41926890/unity-how-to-detect-collision-on-a-child-object-from-the-parent-gameobject) 
+        if (collision.collider.CompareTag("Player"))
+        {
+            Debug.Log("collided");
+            collision.collider.transform.SetParent(transform);
+        }
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.collider.CompareTag("Player"))
+        {
+            // Make the Player a top level object once again
+            other.collider.transform.SetParent(null);
+        }
     }
 }
