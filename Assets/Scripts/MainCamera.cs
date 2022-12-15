@@ -5,8 +5,8 @@ public class MainCamera : MonoBehaviour
     public Transform Player;
     private Vector2 mousePosition;
     private float pitch = 0.0f;
-    private float rotationSpeed = 4.0f;
-    private float _friction = 0.5f;
+    private float rotationSpeed = 10.0f;
+    private readonly float _friction = 0.96f;
 
     private Vector3 _offset;
     // Start is called before the first frame update
@@ -31,7 +31,7 @@ public class MainCamera : MonoBehaviour
         // A rotate requires that _offset be re-calculated
         SetOffset();
         
-        //pitch *= _friction;
+        pitch *= _friction;
     }
 
     private void SetOffset()
