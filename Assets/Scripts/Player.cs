@@ -107,7 +107,11 @@ public class Player : MonoBehaviour
         // https://www.reddit.com/r/Unity3D/comments/6iskah/movetowards_vs_lerp_vs_slerp_vs_smoothdamp/
         // https://forum.unity.com/threads/how-quaternion-lookrotation-works.985800/
         // https://docs.unity3d.com/ScriptReference/Quaternion.LookRotation.html
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation (movement), rotationSpeed * Time.deltaTime);
+        if (movement != Vector3.zero) // Ensures no 'Look Rotation Viewing Vector is Zero' error
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement),
+                rotationSpeed * Time.deltaTime);
+        }
     }
 
     private void PlayerJump()
@@ -143,7 +147,7 @@ public class Player : MonoBehaviour
             // The first code snippet below is in-efficient due to order of multiplication:
             // https://manuelotheo.com/on-optimization-order-of-multiplication-operations-is-inefficient/
             // rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1);
-            // The extra parenthesis ensures the order is correct
+            // The extra parenthesis ensures the order of is optimised
             rb.velocity += Vector3.up * (Physics.gravity.y * (fallMultiplier - 1));
         }
 

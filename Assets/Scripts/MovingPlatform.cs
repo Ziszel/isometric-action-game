@@ -70,7 +70,6 @@ public class MovingPlatform : MonoBehaviour
         // the hierarchy (https://stackoverflow.com/questions/41926890/unity-how-to-detect-collision-on-a-child-object-from-the-parent-gameobject) 
         if (collision.collider.CompareTag("Player"))
         {
-            Debug.Log("collided");
             collision.collider.transform.SetParent(transform);
         }
     }

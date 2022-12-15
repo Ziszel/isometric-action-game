@@ -17,7 +17,6 @@ public class ItemFloat : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("water picked up");
         FindObjectOfType<LevelManager>().playerHasFlower = true;
         Destroy(gameObject);
     }
