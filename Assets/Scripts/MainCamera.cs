@@ -5,7 +5,7 @@ public class MainCamera : MonoBehaviour
     public Transform Player;
     private Vector2 mousePosition;
     private float pitch = 0.0f;
-    private float rotationSpeed = 10.0f;
+    private float rotationSpeed = 5.0f;
     private readonly float _friction = 0.96f;
 
     private Vector3 _offset;
