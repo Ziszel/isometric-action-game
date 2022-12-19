@@ -126,6 +126,12 @@ public class Player : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             _jumpCount += 1;
         }
+        else if (_jumpCount == 1 && doubleJumpTimer == 0)
+        {
+            _onGround = false;
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            _jumpCount += 1;
+        }
         else
         {
             return;
@@ -134,10 +140,8 @@ public class Player : MonoBehaviour
     
     private void HandleJumping(bool _jumpPressed)
     {
-        // Triggering inconsistently
         if (_jumpPressed)
         {
-            // onGround is not the problem
             PlayerJump();
         }
 
@@ -161,17 +165,22 @@ public class Player : MonoBehaviour
             doubleJumpTimer -= Time.deltaTime;
             if (doubleJumpTimer < 0) { doubleJumpTimer = 0.0f; }
         }
+        
+        _onGround = false;
     }
 
     // called once per frame for each collider or RB that touches another
     // therefore if the player is not in the air or has hit a wall, set onGround to true allowing them to jump again
-    private void OnCollisionStay(Collision collisionInfo)
+    // changed to OnCollisionEnter over OnCollisionStay as OnCollisionStay was triggering constantly resulting in
+    // a buggy jump
+    private void OnCollisionEnter(Collision collisionInfo)
     {
-        // If the player collides with the ground (or walls not tagged with TerrainWall, allow them to junmp again!)
-        if(!collisionInfo.collider.CompareTag("TerrainWall"))
+        // If the player collides with the ground (or walls not tagged with TerrainWall, allow them to jump again!)
+        if(!collisionInfo.collider.CompareTag("TerrainWall") && _onGround == false)
         {
             _onGround = true;
             _jumpCount = 0;
+            ResetJumpTimer();
         }
         // If the player hits a TerrainWall then make sure they cannot jump again, send them into the ocean!
         // Originally I used this in conjunction with a physics material on the walls to stop the player sticking
@@ -192,6 +201,6 @@ public class Player : MonoBehaviour
 
     private void ResetJumpTimer()
     {
-        doubleJumpTimer = 0.5f;
+        doubleJumpTimer = 0.1f;
     }
 }
