@@ -65,6 +65,8 @@ public class Player : MonoBehaviour
     {
         // I have set constraints on the X and Z axis to stop the player from falling over when moving forward
         // https://forum.unity.com/threads/character-falling-over-problem.160027/
+        var moveForward = new Vector3();
+        var moveRight = new Vector3();
         if (zMovement > 0)
         {
             // I have previously adjusted the rb.velocity directly by using rb.velocity = transform.forward / left * speed
@@ -75,21 +77,29 @@ public class Player : MonoBehaviour
             // After adding in camera movement, the player must now move in relation to where the camera is looking. That
             // is what the multiplying the movement speed by the camera's transform is doing
             // https://forum.unity.com/threads/solved-moving-object-in-the-direction-of-camera-view.30330/
-            rb.AddForce(mainCamera.transform.forward * -speed);
+            // rb.AddForce(-mainCamera.transform.forward * speed); // move forward ( but broken when jumping backwards )
+            // normalizing first and then x the speed has removed the issues surrounding broken jumping
+            moveForward = new Vector3(mainCamera.transform.forward.x, 0.0f, mainCamera.transform.forward.z)
+                .normalized * -speed;
         }
         else if (zMovement < 0)
         {
-            rb.AddForce(mainCamera.transform.forward * speed); // move forward
+            moveForward = new Vector3(mainCamera.transform.forward.x, 0.0f, mainCamera.transform.forward.z)
+                .normalized * speed;
         }
-        
+
         if (hMovement > 0)
         {
-            rb.AddForce(mainCamera.transform.right * -speed); // move Right
+            moveRight = new Vector3(mainCamera.transform.right.x, 0.0f, mainCamera.transform.right.z)
+                .normalized * -speed;
         }
         else if (hMovement < 0)
         {
-            rb.AddForce(mainCamera.transform.right * speed); // move Left
+            moveRight = new Vector3(mainCamera.transform.right.x, 0.0f, mainCamera.transform.right.z)
+                .normalized * speed;
         }
+        
+        rb.AddForce(moveForward + moveRight);
     }
 
     private void RotatePlayer()
@@ -123,13 +133,15 @@ public class Player : MonoBehaviour
         if (_jumpCount < 1)
         {
             _onGround = false;
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            // This results in a double jump that is of the same velocity as opposed to AddForce() which can result in
+            // a second jump that feels too weak at times
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             _jumpCount += 1;
         }
         else if (_jumpCount == 1 && doubleJumpTimer == 0)
         {
             _onGround = false;
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             _jumpCount += 1;
         }
         else

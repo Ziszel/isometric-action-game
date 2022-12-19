@@ -133,10 +133,10 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   speed: 200
   rotationSpeed: 5
-  jumpForce: 125
+  jumpForce: 75
   fallMultiplier: 1.5
   lowJumpMultiplier: 1.2
-  doubleJumpTimer: 0
+  doubleJumpTimer: 0.3
 --- !u!1 &2576986071891178671
 GameObject:
   m_ObjectHideFlags: 0
