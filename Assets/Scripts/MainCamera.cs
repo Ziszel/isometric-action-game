@@ -10,6 +10,7 @@ public class MainCamera : MonoBehaviour
     private float rotationSpeed = 5.0f;
     private readonly float _friction = 0.96f;
     private int defaultFov = 60; // The FOV when not moving
+    private int maxFov = 95; // the max FOV value
     private float zoomFactor = 0.8f; // controls how much the FOV will change when the player moves
     
 
@@ -39,6 +40,8 @@ public class MainCamera : MonoBehaviour
         // A rotate requires that _offset be re-calculated
         SetOffset();
         pitch *= _friction; // slow down the camera rotation smoothly
+        
+        //if ()
     }
 
     private void FixedUpdate()
@@ -47,7 +50,15 @@ public class MainCamera : MonoBehaviour
         var playerVelocity = new Vector3(Player.rb.velocity.x, 0.0f, Player.rb.velocity.z).magnitude;
         // updates the FOV by the player's current speed * zoomfactor values
         // because velocity already takes into consideration acceleration, this feels smooth by default!
-        mainCamera.fieldOfView = defaultFov + (playerVelocity * zoomFactor);
+        // the if statement caps FOV at 95 so that it never feels TOO fast
+        if (defaultFov + (playerVelocity * zoomFactor) > maxFov)
+        {
+            mainCamera.fieldOfView = maxFov;
+        }
+        else
+        {
+            mainCamera.fieldOfView = defaultFov + (playerVelocity * zoomFactor);
+        }
     }
 
     private void SetOffset()
