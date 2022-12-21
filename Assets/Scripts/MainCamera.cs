@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class MainCamera : MonoBehaviour
@@ -8,6 +9,9 @@ public class MainCamera : MonoBehaviour
     private float pitch = 0.0f;
     private float rotationSpeed = 5.0f;
     private readonly float _friction = 0.96f;
+    private int defaultFov = 60; // The FOV when not moving
+    private float zoomFactor = 0.8f; // controls how much the FOV will change when the player moves
+    
 
     private Vector3 _offset;
     // Start is called before the first frame update
@@ -22,8 +26,6 @@ public class MainCamera : MonoBehaviour
     // https://www.maxester.com/blog/2020/02/24/how-do-you-make-the-camera-follow-the-player-in-unity-3d/
     private void LateUpdate()
     {
-        var playerVelocity = new Vector3(Player.rb.velocity.x, 0.0f, Player.rb.velocity.z).magnitude;
-        mainCamera.fieldOfView = 60 + playerVelocity;
         // Get the mouse in a similar way to buttons/keys and set the pitch relevant to the movement of the mouse
         // Mouse sensitivity feels different in WebGL compared to editor, this is a long standing Unity bug:
         // https://forum.unity.com/threads/mouse-sensitivity-in-webgl-way-too-sensitive.411574/#post-3421405
@@ -36,8 +38,16 @@ public class MainCamera : MonoBehaviour
         
         // A rotate requires that _offset be re-calculated
         SetOffset();
-        
-        pitch *= _friction;
+        pitch *= _friction; // slow down the camera rotation smoothly
+    }
+
+    private void FixedUpdate()
+    {
+        // Gets the speed at which the player is moving (ignoring the Y speed of the player's RB)
+        var playerVelocity = new Vector3(Player.rb.velocity.x, 0.0f, Player.rb.velocity.z).magnitude;
+        // updates the FOV by the player's current speed * zoomfactor values
+        // because velocity already takes into consideration acceleration, this feels smooth by default!
+        mainCamera.fieldOfView = defaultFov + (playerVelocity * zoomFactor);
     }
 
     private void SetOffset()
