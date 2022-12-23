@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 
 public class MainCamera : MonoBehaviour
@@ -12,6 +12,7 @@ public class MainCamera : MonoBehaviour
     private int defaultFov = 60; // The FOV when not moving
     private int maxFov = 95; // the max FOV value
     private float zoomFactor = 0.8f; // controls how much the FOV will change when the player moves
+    private float _cameraShakeMagnitude = 0.2f;
     
 
     private Vector3 _offset;
@@ -41,10 +42,20 @@ public class MainCamera : MonoBehaviour
         SetOffset();
         pitch *= _friction; // slow down the camera rotation smoothly
         
-        //if ()
+        // at max FOV shake the camera slightly to stimulate very fast motion
+        if (mainCamera.fieldOfView == maxFov)
+        {
+            // A co-routine calls a function in a slightly different fashion
+            StartCoroutine(ShakeCamera(_cameraShakeMagnitude));   
+        }
     }
 
     private void FixedUpdate()
+    {
+        UpdateFov();
+    }
+
+    private void UpdateFov()
     {
         // Gets the speed at which the player is moving (ignoring the Y speed of the player's RB)
         var playerVelocity = new Vector3(Player.rb.velocity.x, 0.0f, Player.rb.velocity.z).magnitude;
@@ -59,6 +70,28 @@ public class MainCamera : MonoBehaviour
         {
             mainCamera.fieldOfView = defaultFov + (playerVelocity * zoomFactor);
         }
+    }
+
+    // A co-routine that enables running multiple things in a parallel
+    // This co-routine was created with the help of this tutorial: https://www.youtube.com/watch?v=9A9yj8KnM8c
+    IEnumerator ShakeCamera(float _cameraShakeMagnitude)
+    {
+        // Store the original value of the camera so that when shaking is done it can be restored
+        Vector3 oldMainCamPosition = transform.localPosition;
+        while (mainCamera.fieldOfView == maxFov) // While the FOV is at maxFOV (i.e, the player is at max velocity)
+        {
+            // Get a random position at x and y, and adjust them to be relevant to the moving camera
+            float x = (Random.Range(-1f, 1f) * _cameraShakeMagnitude) + oldMainCamPosition.x;
+            float y = (Random.Range(-1f, 1f) * _cameraShakeMagnitude) + oldMainCamPosition.y;
+
+            // Update the camera itself with the updated co-ordinates
+            transform.localPosition = new Vector3(x, y, oldMainCamPosition.z);
+
+            // Wait until the next frame is drawn to iterate the while loop
+            yield return null;
+        }
+
+        transform.localPosition = oldMainCamPosition; // Set the camera back to what it was before the shake
     }
 
     private void SetOffset()
