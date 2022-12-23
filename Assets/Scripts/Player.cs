@@ -1,9 +1,11 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public Rigidbody rb;
     public Camera mainCamera;
+    public ParticleSystem particle;
     // https://docs.unity3d.com/Manual/script-Serialization.html
     // https://docs.unity3d.com/ScriptReference/SerializeField.html
     // [SerializeField] allows Unity to serialize private fields
@@ -40,6 +42,19 @@ public class Player : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             _jumpPressed = true;
+        }
+
+        // If the player stops moving, stop the particle system
+        if (rb.velocity == Vector3.zero)
+        {
+            particle.Stop();
+        }
+        else
+        {
+            // All of the particle settings have been pre-configured in the editor so all I need to do here is set
+            // the particle system to play
+            particle.Play();
+
         }
 
     }
