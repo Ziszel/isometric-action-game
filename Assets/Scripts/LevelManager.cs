@@ -18,6 +18,11 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        // Cursor comes from UnityEngine
+        // Make the mouse invisible and lock its position to the centre of the screen
+        // https://gamedevbeginner.com/how-to-lock-hide-the-cursor-in-unity/
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         // If we already have an instance, we don't want another gameObject.
         // This stops duplication on reloading of the scene
         if (instance != null)

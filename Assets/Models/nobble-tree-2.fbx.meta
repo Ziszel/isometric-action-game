@@ -1,9 +1,24 @@
 fileFormatVersion: 2
-guid: b6fd86b1086181a4f9bca3162c3d861c
+guid: 1cbda6bdcc8199cbb93ae769f0f035eb
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 41f846ed3b962a0eba73a1de0746b409, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 41f846ed3b962a0eba73a1de0746b409, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TexturesCom_Branches0018_1_masked_S
+    second: {fileID: 2100000, guid: 1761692d26175e1399e998efa3578eba, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -36,7 +51,7 @@ ModelImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: 1
-    meshCompression: 3
+    meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
