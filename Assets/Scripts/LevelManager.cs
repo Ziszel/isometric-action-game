@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,9 +15,10 @@ public class LevelManager : MonoBehaviour
     public static LevelManager instance; // static ensures there can be only one
     public bool playerHasFlower;
     public Cycle cycle;
-    public float tenSeconds;
-    private float timer; // seconds
-
+    public Light LightSource;
+    private float cycleTimer; // seconds
+    private float cycleTime = 45.0f;
+    private Vector3 sunRotation = Vector3.zero;
     private void Awake()
     {
         // Cursor comes from UnityEngine
@@ -33,9 +36,7 @@ public class LevelManager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject); // don't destroy the empty game object when loading a new scene
-
-        tenSeconds = 10.0f;
-        timer = tenSeconds;
+        
         cycle = Cycle.Day;
         playerHasFlower = false;
     }
@@ -43,14 +44,24 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (timer <= 0.0f)
+        // taking a full day / night cycle to switch over, investigate!
+        // set whether it's day or night based on the sun (directional light) rotation axis X
+        if (LightSource.transform.rotation.x < 0.0f)
         {
-            cycle = UpdateState(cycle);
-            timer = tenSeconds;
+            cycle = Cycle.Night;
         }
+        else if (LightSource.transform.rotation.x > 0.0f)
+        {
+            cycle = Cycle.Day;
+        }
+        /* In here, use a FSM to manage the states of the scene: explore, in-battle, dead, etc...
+        if (cycle == Cycle.Day)
+        {
+            do day things
+        } */
+        Debug.Log(cycle);
         
-        timer -= Time.deltaTime;
-        // In here, use a FSM to manage the states of the scene: explore, in-battle, dead, etc...
+        RotateSun();
 
     }
 
@@ -61,19 +72,13 @@ public class LevelManager : MonoBehaviour
         playerHasFlower = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
-    private Cycle UpdateState(Cycle cycle)
-    {
-        if (cycle == Cycle.Day)
-        {
-            cycle = Cycle.Night;
-        }
-        else if (cycle == Cycle.Night)
-        {
-            cycle = Cycle.Day;
-        }
-
-        return cycle;
-    }
     
+    // https://vionixstudio.com/2022/04/25/creating-a-day-and-night-cycle-in-unity/
+    // We can use the X axis of the light to change how it looks & to track it as a status
+    public void RotateSun()
+    {
+        sunRotation.x = cycleTime * Time.deltaTime;
+        LightSource.transform.Rotate(sunRotation, Space.World);
+    }
+
 }
