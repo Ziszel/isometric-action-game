@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 
 public class GameManager : MonoBehaviour
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     public Sprite cnLangSprite;
     public Button soundBtn;
     public Image langImg;
+    public TMP_Text playBtnText;
+    public TMP_Text infoBtnText;
     // private
     private static bool soundOn;
     public static string Language;
@@ -22,6 +25,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        var text = playBtn.GetComponentInChildren<Text>();
         Button playButton = playBtn.GetComponent<Button>();
         playButton.onClick.AddListener(StartGame);
         langBtn.onClick.AddListener(OnLanguageClick);
@@ -40,11 +44,15 @@ public class GameManager : MonoBehaviour
         {
             Language = "CN";
             langImg.sprite = cnLangSprite;
+            playBtnText.text = "¿ªÊ¼";
+            infoBtnText.text = "½éÉÜ";
         }
         else if (Language.Equals("CN"))
         {
             Language = "EN";
             langImg.sprite = enLangSprite;
+            playBtnText.text = "PLAY";
+            infoBtnText.text = "INFO";
         }
     }
 
