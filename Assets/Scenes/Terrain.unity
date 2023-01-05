@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18045385, g: 0.22591832, b: 0.30702406, a: 1}
+  m_IndirectSpecularColor: {r: 0.18044698, g: 0.22590943, b: 0.30701706, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1932,8 +1932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHasFlower: 0
-  cycle: 0
-  tenSeconds: 0
+  LightSource: {fileID: 0}
 --- !u!4 &1151662687
 Transform:
   m_ObjectHideFlags: 0
@@ -3573,6 +3572,63 @@ PrefabInstance:
       objectReference: {fileID: 13400000, guid: d3218002b62d94817b7ce4bd13dc154d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf3d010780aefda4f8589a41b807ad2f, type: 3}
+--- !u!1001 &3472543564361309622
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2679541457441970131, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3342924841919614313, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
+      propertyPath: m_Name
+      value: 'Tree-test '
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cd117801e710f5d4b872b8e139512a8e, type: 3}
 --- !u!1001 &5302412092452694083
 PrefabInstance:
   m_ObjectHideFlags: 0
