@@ -52,8 +52,6 @@ public class MainCamera : MonoBehaviour
             if (_shakeTimer <= 0.0f) { StartCoroutine(ShakeCamera(_cameraShakeMagnitude)); }
         }
         else { ResetShakeTimer(); }
-        
-        Debug.Log(_shakeTimer);
     }
 
     private void FixedUpdate()
