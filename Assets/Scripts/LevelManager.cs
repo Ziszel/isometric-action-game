@@ -10,7 +10,6 @@ public enum Cycle {
 // Cannot call class 'SceneManager' as that is a built-in Unity class
 public class LevelManager : MonoBehaviour
 {
-    public static LevelManager instance; // static ensures there can be only one
     public bool playerHasFlower;
     public Light LightSource;
     private Cycle _cycle;
@@ -20,6 +19,7 @@ public class LevelManager : MonoBehaviour
     private float _sunRotationX;
     private Color _lightColour;
     //private Color _lightestColour;
+    private float _sceneDelay;
     private void Awake()
     {
         // Cursor comes from UnityEngine
@@ -27,16 +27,6 @@ public class LevelManager : MonoBehaviour
         // https://gamedevbeginner.com/how-to-lock-hide-the-cursor-in-unity/
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        // If we already have an instance, we don't want another gameObject.
-        // This stops duplication on reloading of the scene
-        if (instance != null)
-        {
-            // We already have an instance so destroy the newly created one.
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
-        DontDestroyOnLoad(gameObject); // don't destroy the empty game object when loading a new scene
 
         //_lightestColour = new Color32(190, 190, 190, 1);
         _sunRotationX = 90.0f;
@@ -64,7 +54,7 @@ public class LevelManager : MonoBehaviour
             }
             _cycleTimer = _lengthOfDay;
         }
-
+        
         RotateSun();
         //TintSkyBox();
         _cycleTimer -= Time.deltaTime;
@@ -80,6 +70,11 @@ public class LevelManager : MonoBehaviour
     }
 
     public void CompleteLevel()
+    {
+        Invoke("LoadEndScene", _sceneDelay);
+    }
+
+    private void LoadEndScene()
     {
         SceneManager.LoadScene("EndMenu");
     }
