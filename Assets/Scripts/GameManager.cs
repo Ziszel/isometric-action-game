@@ -18,24 +18,25 @@ public class GameManager : MonoBehaviour
     public Image langImg;
     public TMP_Text playBtnText;
     public TMP_Text infoBtnText;
-    // private
-    private static bool soundOn;
+    public Button AudioBtn;
+    public Sprite audOnSprite;
+    public Sprite audOffSprite;
+    public Image audImg;
+    public static bool soundOn;
     public static string Language;
+    // private
+
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        soundOn = true;
+        Language = "EN";
         var text = playBtn.GetComponentInChildren<Text>();
         Button playButton = playBtn.GetComponent<Button>();
         playButton.onClick.AddListener(StartGame);
         langBtn.onClick.AddListener(OnLanguageClick);
-        Language = "EN";
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Debug.Log(Language);
+        AudioBtn.onClick.AddListener(OnAudioClick);
     }
 
     public void OnLanguageClick()
@@ -56,7 +57,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StartGame()
+    public void OnAudioClick()
+    {
+        if (soundOn)
+        {
+            soundOn = false;
+            audImg.sprite = audOffSprite;
+        }
+        else if (!soundOn)
+        {
+            soundOn = true;
+            audImg.sprite = audOnSprite;
+        }
+    }
+
+    private void StartGame()
     {
         SceneManager.LoadScene("LevelOne");
     }
