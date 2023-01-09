@@ -7,7 +7,7 @@ public class EndOfLevel : MonoBehaviour
     {
         if (FindObjectOfType<LevelManager>().playerHasFlower)
         {
-            FindObjectOfType<LevelManager>().Reset();
+            FindObjectOfType<LevelManager>().CompleteLevel();
         }
     }
 }

@@ -9,6 +9,9 @@ public class EndGameScript : MonoBehaviour
 
     public void Awake()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        
         Button returnToMenuBtn = returnToMenu.GetComponent<Button>();
         returnToMenuBtn.onClick.AddListener(ResetGame);
     }

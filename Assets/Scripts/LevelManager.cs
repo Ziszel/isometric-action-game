@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -39,7 +37,7 @@ public class LevelManager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject); // don't destroy the empty game object when loading a new scene
-        
+
         //_lightestColour = new Color32(190, 190, 190, 1);
         _sunRotationX = 90.0f;
         _cycle = Cycle.Day;
@@ -79,6 +77,11 @@ public class LevelManager : MonoBehaviour
     {
         playerHasFlower = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void CompleteLevel()
+    {
+        SceneManager.LoadScene("EndMenu");
     }
     
     // https://vionixstudio.com/2022/04/25/creating-a-day-and-night-cycle-in-unity/
