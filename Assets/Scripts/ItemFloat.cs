@@ -9,19 +9,20 @@ public enum BottleDirection
 public class ItemFloat : MonoBehaviour
 {
     public Transform itemTransform;
-    
-    private BottleDirection bottleDir;
+    public LevelManager levelManager;
     [SerializeField]private float moveSpeed = 0.8f;
     [SerializeField]private float maxDistance = 0.8f;
     [SerializeField]private float yRotationValue = 35.0f;
-    private Vector3 startingPosition;
-    private Vector3 itemRotation;
+    private BottleDirection _bottleDir;
+    private Vector3 _startingPosition;
+    private Vector3 _itemRotation;
 
     private void Awake()
     {
-        startingPosition = itemTransform.position;
-        bottleDir = BottleDirection.Up;
-        itemRotation = new Vector3(0.0f, yRotationValue, 0.0f);
+        _startingPosition = itemTransform.position;
+        _bottleDir = BottleDirection.Up;
+        _itemRotation = new Vector3(0.0f, yRotationValue, 0.0f);
+        levelManager = FindObjectOfType<LevelManager>();
     }
 
     private void Update()
@@ -32,24 +33,24 @@ public class ItemFloat : MonoBehaviour
     
     private void ItemSway()
     {
-        if (bottleDir == BottleDirection.Up)
+        if (_bottleDir == BottleDirection.Up)
         {
             itemTransform.Translate((Vector3.up * moveSpeed) * Time.deltaTime);
         }
-        else if (bottleDir == BottleDirection.Down)
+        else if (_bottleDir == BottleDirection.Down)
         {
             itemTransform.Translate((Vector3.up * -moveSpeed) * Time.deltaTime);
         }
 
         // if the platform is further than the max distance, change direction
-        if (itemTransform.position.y > startingPosition.y + maxDistance)
+        if (itemTransform.position.y > _startingPosition.y + maxDistance)
         {
-            bottleDir = BottleDirection.Down;
+            _bottleDir = BottleDirection.Down;
         }
         // if the platform has reached its initial position then change direction
-        else if (itemTransform.position.y < startingPosition.y - maxDistance)
+        else if (itemTransform.position.y < _startingPosition.y - maxDistance)
         {
-            bottleDir = BottleDirection.Up;
+            _bottleDir = BottleDirection.Up;
         }
     }
 
@@ -57,13 +58,13 @@ public class ItemFloat : MonoBehaviour
     {
         // https://docs.unity3d.com/ScriptReference/Transform.Rotate.html
         // RotateAround has been depreciated and 'Rotate()' is the method to use going forward.
-        transform.Rotate(0.0f, (itemRotation.y * Time.deltaTime), 0.0f, Space.World);
+        transform.Rotate(0.0f, (_itemRotation.y * Time.deltaTime), 0.0f, Space.World);
         //itemTransform.rotation *= Quaternion.Euler(itemRotation);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        FindObjectOfType<LevelManager>().playerHasFlower = true;
+        levelManager.playerHasFlower = true;
         Destroy(gameObject);
     }
 }
