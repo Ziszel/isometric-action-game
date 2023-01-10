@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,16 +10,16 @@ public enum Cycle {
 // Cannot call class 'SceneManager' as that is a built-in Unity class
 public class LevelManager : MonoBehaviour
 {
-    public static LevelManager instance; // static ensures there can be only one
     public bool playerHasFlower;
-    private Cycle cycle;
     public Light LightSource;
-    private float cycleTimer; // seconds
-    private float lengthOfDay;
-    private float visualCycleTime = 10.0f;
-    private float sunRotationX;
-    private Color lightColour;
-    private Color lightestColour;
+    private Cycle _cycle;
+    private float _cycleTimer; // seconds
+    private float _lengthOfDay;
+    private float _visualCycleTime = 10.0f;
+    private float _sunRotationX;
+    private Color _lightColour;
+    //private Color _lightestColour;
+    private float _sceneDelay;
     private void Awake()
     {
         // Cursor comes from UnityEngine
@@ -29,24 +27,14 @@ public class LevelManager : MonoBehaviour
         // https://gamedevbeginner.com/how-to-lock-hide-the-cursor-in-unity/
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        // If we already have an instance, we don't want another gameObject.
-        // This stops duplication on reloading of the scene
-        if (instance != null)
-        {
-            // We already have an instance so destroy the newly created one.
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
-        DontDestroyOnLoad(gameObject); // don't destroy the empty game object when loading a new scene
-        
-        lightestColour = new Color32(190, 190, 190, 1);
-        sunRotationX = 90.0f;
-        cycle = Cycle.Day;
+
+        //_lightestColour = new Color32(190, 190, 190, 1);
+        _sunRotationX = 90.0f;
+        _cycle = Cycle.Day;
         playerHasFlower = false;
-        lengthOfDay = 10.0f;
-        visualCycleTime = 20.0f;
-        cycleTimer = 10.0f;
+        _lengthOfDay = 10.0f;
+        _visualCycleTime = 20.0f;
+        _cycleTimer = 10.0f;
     }
 
     // Update is called once per frame
@@ -54,29 +42,22 @@ public class LevelManager : MonoBehaviour
     {
         // taking a full day / night cycle to switch over, investigate!
         // set whether it's day or night based on the sun (directional light) rotation axis X
-        if (cycleTimer <= 0.0f)
+        if (_cycleTimer <= 0.0f)
         {
-            if (cycle == Cycle.Day)
+            if (_cycle == Cycle.Day)
             {
-                cycle = Cycle.Night;
+                _cycle = Cycle.Night;
             }
             else
             {
-                cycle = Cycle.Day;
+                _cycle = Cycle.Day;
             }
-            cycleTimer = lengthOfDay;
+            _cycleTimer = _lengthOfDay;
         }
-
-        /* In here, use a FSM to manage the states of the scene: explore, in-battle, dead, etc...
-        if (cycle == Cycle.Day)
-        {
-            do day things
-        } */
-        Debug.Log(cycle);
         
         RotateSun();
         //TintSkyBox();
-        cycleTimer -= Time.deltaTime;
+        _cycleTimer -= Time.deltaTime;
 
     }
 
@@ -87,13 +68,23 @@ public class LevelManager : MonoBehaviour
         playerHasFlower = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void CompleteLevel()
+    {
+        Invoke("LoadEndScene", _sceneDelay);
+    }
+
+    private void LoadEndScene()
+    {
+        SceneManager.LoadScene("EndMenu");
+    }
     
     // https://vionixstudio.com/2022/04/25/creating-a-day-and-night-cycle-in-unity/
     // We can use the X axis of the light to change how it looks & to track it as a status
     public void RotateSun()
     {
-        sunRotationX = visualCycleTime * Time.deltaTime;
-        LightSource.transform.Rotate(new Vector3(sunRotationX, 0.0f, 0.0f), Space.World);
+        _sunRotationX = _visualCycleTime * Time.deltaTime;
+        LightSource.transform.Rotate(new Vector3(_sunRotationX, 0.0f, 0.0f), Space.World);
     }
 
     private void TintSkyBox()
