@@ -51,11 +51,14 @@ public class GameManager : MonoBehaviour
         {
             Language = "CN";
             langImg.sprite = cnLangSprite;
-            playBtnText.text = "��ʼ";
-            infoBtnText.text = "����";
-            InfoScreenText.text = "�����ϵĻ����Ѿ��ɿ�... ���ڻ���ʧȥ��ƽ�⣬��ҹ�Ͱ��첻�ϵ��໥������˭����Ҫ��Ϊ�ƿ��������һ����ʹ��ҹѭ����ʧȥ�����塣" +
-                "ֻ�д�˵�е�����԰���������������������磬Ϊ����Ļ����������֮ˮ���ָ�ƽ�⡣\n\n" +
-                "���Ʒ���:\nW��A��S��D - \n�ƶ���� : ��ת�����\n�ո�� : ��Ծ���ڿ����ٰ�һ�Σ��Ϳ��������Σ���";
+            playBtnText.text = "开始";
+            infoBtnText.text = "介绍";
+            InfoScreenText.text = "世界上的花朵已经干枯... 现在环境失去了平衡，黑夜和白天不断地相互争斗，谁都想要成为掌控世界的那一个，使日夜循环都失去了意义。\n\n" +
+                "只有传说中的亡灵园丁“帕恩”可以拯救世界，为世界的花朵带来生命之水，恢复平衡。" + 
+                "控制方法:\n" +
+                "W、A、S、D - 移动\n" +
+                "鼠标: 旋转摄像机\n" +
+                "空格键: 跳跃（在空中再按一次，就可以跳两次！)"; 
 
         }
         else if (Language.Equals("CN"))
