@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 497078}
   - component: {fileID: 3345802}
   - component: {fileID: 2343680}
-  - component: {fileID: 2878677677611335}
+  - component: {fileID: 9025804684245323510}
   m_Layer: 0
   m_Name: Rock Type4 02
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2878677677611335
-BoxCollider:
+--- !u!64 &9025804684245323510
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,6 +94,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.538333, y: 0.7950312, z: 3.9083462}
-  m_Center: {x: 0.11059582, y: 0.30754304, z: 0.05611801}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 2aeea187d4a9dce4da2f26d62f5bbc96, type: 3}
