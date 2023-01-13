@@ -8,6 +8,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
 
     [Header("Buttons")]
     public Button playBtn;
@@ -26,6 +27,9 @@ public class GameManager : MonoBehaviour
     public TMP_Text playBtnText;
     public TMP_Text infoBtnText;
     public TMP_Text InfoScreenText;
+    public AudioSource music;
+    private AudioSource playBtnAudio;
+    private AudioSource infoBtnAudio; 
 
     // public variables not set in inspector
     public static bool soundOn;
@@ -33,9 +37,11 @@ public class GameManager : MonoBehaviour
     public GameObject ghost;
     // private
 
-    // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         soundOn = true;
         Language = "EN";
         var text = playBtn.GetComponentInChildren<Text>();
@@ -47,6 +53,9 @@ public class GameManager : MonoBehaviour
         AudioBtn.onClick.AddListener(OnAudioClick);
         infoBtn.onClick.AddListener(ShowInfo);
         backBtn.onClick.AddListener(HideInfo);
+        music = GetComponent<AudioSource>();
+        playBtnAudio = playBtn.GetComponent<AudioSource>();
+        infoBtnAudio = infoBtn.GetComponent<AudioSource>();
     }
 
     public void OnLanguageClick()
@@ -84,38 +93,41 @@ public class GameManager : MonoBehaviour
         {
             soundOn = false;
             audImg.sprite = audOffSprite;
+            music.Stop();
         }
         else if (!soundOn)
         {
             soundOn = true;
             audImg.sprite = audOnSprite;
+            music.Play();
         }
     }
 
     private void StartGame()
     {
+        infoBtnAudio.Play();
         SceneManager.LoadScene("LevelTwo");
     }
 
     private void ShowInfo()
     {
-        // hide main menu elements
+        infoBtnAudio.Play();
+        // hide main menu and show info elements
         playBtn.gameObject.SetActive(false);
         infoBtn.gameObject.SetActive(false);
         ghost.gameObject.SetActive(false);
         backBtn.gameObject.SetActive(true);
         InfoScreenText.gameObject.SetActive(true);
-        // show info elements
     }
 
     private void HideInfo()
     {
-        // hide info elements
+        // hide info and show main menu elements
         playBtn.gameObject.SetActive(true);
         infoBtn.gameObject.SetActive(true);
         ghost.gameObject.SetActive(true);
         backBtn.gameObject.SetActive(false);
         InfoScreenText.gameObject.SetActive(false);
-        // show main menu elements
+        infoBtnAudio.Play();
     }
 }

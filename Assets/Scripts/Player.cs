@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     private bool _onGround = true;
     private int _jumpCount;
     private bool _jumpPressed;
+    private AudioSource _jumpAudio;
 
     private void Awake()
     {
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour
         _jumpPressed = false;
         ResetJumpTimer();
         mainCamera = Camera.main;
+        _jumpAudio = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -152,6 +154,7 @@ public class Player : MonoBehaviour
             // a second jump that feels too weak at times
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
             _jumpCount += 1;
+            _jumpAudio.Play();
         }
         else if (_jumpCount == 1 && doubleJumpTimer == 0)
         {
