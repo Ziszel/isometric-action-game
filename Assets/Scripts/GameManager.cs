@@ -90,7 +90,8 @@ public class GameManager : MonoBehaviour
 
     private void StartGame()
     {
-        SceneManager.LoadScene("LevelOne");
+        //SceneManager.LoadScene("LevelOne");
+        SceneManager.LoadScene("EndMenu");
     }
 
     private void ShowInfo()
