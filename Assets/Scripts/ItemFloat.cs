@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using TMPro;
 
 public enum BottleDirection
 {
@@ -10,6 +11,7 @@ public class ItemFloat : MonoBehaviour
 {
     public Transform itemTransform;
     public LevelManager levelManager;
+    public TMP_Text bottleText;
     [SerializeField]private float moveSpeed = 0.8f;
     [SerializeField]private float maxDistance = 0.8f;
     [SerializeField]private float yRotationValue = 35.0f;
@@ -70,5 +72,11 @@ public class ItemFloat : MonoBehaviour
             levelManager.playerHasFlower = true;
         }
         Destroy(gameObject);
+        UpdateText();
+    }
+
+    private void UpdateText()
+    {
+        bottleText.text = levelManager.bottlesCollected + "/3";
     }
 }
