@@ -14,6 +14,8 @@ public class LevelManager : MonoBehaviour
     public bool playerHasFlower;
     public int bottlesCollected;
     public Light LightSource;
+    public AudioSource bottlePickupAudio;
+    public AudioSource playerDeathAudio;
     private Cycle _cycle;
     private float _cycleTimer; // seconds
     private float _lengthOfDay;
@@ -21,6 +23,7 @@ public class LevelManager : MonoBehaviour
     private float _sunRotationX;
     private Color _lightColour;
     private float _sceneDelay;
+
     private void Awake()
     {
         // Cursor comes from UnityEngine
@@ -66,7 +69,7 @@ public class LevelManager : MonoBehaviour
     // will be split out into 'PlayerDead' & 'LevelComplete' methods eventually
     public void Reset()
     {
-        playerHasFlower = false;
+        playerDeathAudio.Play();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -86,5 +89,10 @@ public class LevelManager : MonoBehaviour
     {
         _sunRotationX = _visualCycleTime * Time.deltaTime;
         LightSource.transform.Rotate(new Vector3(_sunRotationX, 0.0f, 0.0f), Space.World);
+    }
+
+    public void PlayBottlePickup()
+    {
+        bottlePickupAudio.Play();
     }
 }
