@@ -4,7 +4,9 @@ using UnityEngine;
 public enum PlatformDirection
 {
     left = 0,
-    right = 1
+    right = 1,
+    forwards = 2,
+    back = 3
 }
 
 public class MovingPlatform : MonoBehaviour
@@ -13,10 +15,10 @@ public class MovingPlatform : MonoBehaviour
     // is on certain levels
     [SerializeField] private float moveSpeed;
     [SerializeField] private float maxDistance;
+    [SerializeField] private PlatformDirection dir; 
 
     // Store the dir as an enum so that we can extend this class to move the platform in different
     // directions if we require
-    private PlatformDirection dir = PlatformDirection.left;
     public Transform platformTransform;
     private Vector3 initialPosition;
 
