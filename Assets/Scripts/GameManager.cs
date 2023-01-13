@@ -9,25 +9,29 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
 
+    [Header("Buttons")]
     public Button playBtn;
     public Button infoBtn;
     public Button langBtn;
     public Button backBtn;
+    public Button AudioBtn;
+    [Header("Sprites & Image")]
     public Sprite enLangSprite;
     public Sprite cnLangSprite;
+    public Sprite audOnSprite;
+    public Sprite audOffSprite;
     public Image langImg;
+    public Image audImg;
+    [Header("Text")]
     public TMP_Text playBtnText;
     public TMP_Text infoBtnText;
     public TMP_Text InfoScreenText;
-    public Button AudioBtn;
-    public Sprite audOnSprite;
-    public Sprite audOffSprite;
-    public Image audImg;
+
+    // public variables not set in inspector
     public static bool soundOn;
     public static string Language;
     public GameObject ghost;
     // private
-
 
     // Start is called before the first frame update
     private void Start()
@@ -90,7 +94,6 @@ public class GameManager : MonoBehaviour
 
     private void StartGame()
     {
-        //SceneManager.LoadScene("LevelOne");
         SceneManager.LoadScene("LevelTwo");
     }
 
