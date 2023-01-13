@@ -64,7 +64,11 @@ public class ItemFloat : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        levelManager.playerHasFlower = true;
+        levelManager.bottlesCollected++;
+        if (levelManager.bottlesCollected == 3)
+        {
+            levelManager.playerHasFlower = true;
+        }
         Destroy(gameObject);
     }
 }
