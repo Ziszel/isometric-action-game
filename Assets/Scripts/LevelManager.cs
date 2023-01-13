@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 // every ten seconds change the state of the game
 public enum Cycle {
@@ -55,7 +56,7 @@ public class LevelManager : MonoBehaviour
             }
             _cycleTimer = _lengthOfDay;
         }
-        
+       
         RotateSun();
         _cycleTimer -= Time.deltaTime;
 
