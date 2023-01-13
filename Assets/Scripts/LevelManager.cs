@@ -11,6 +11,7 @@ public enum Cycle {
 public class LevelManager : MonoBehaviour
 {
     public bool playerHasFlower;
+    public int bottlesCollected;
     public Light LightSource;
     private Cycle _cycle;
     private float _cycleTimer; // seconds
@@ -18,7 +19,6 @@ public class LevelManager : MonoBehaviour
     private float _visualCycleTime = 10.0f;
     private float _sunRotationX;
     private Color _lightColour;
-    //private Color _lightestColour;
     private float _sceneDelay;
     private void Awake()
     {
@@ -35,6 +35,7 @@ public class LevelManager : MonoBehaviour
         _lengthOfDay = 10.0f;
         _visualCycleTime = 20.0f;
         _cycleTimer = 10.0f;
+        bottlesCollected = 0;
     }
 
     // Update is called once per frame
@@ -56,7 +57,6 @@ public class LevelManager : MonoBehaviour
         }
         
         RotateSun();
-        //TintSkyBox();
         _cycleTimer -= Time.deltaTime;
 
     }
@@ -86,21 +86,4 @@ public class LevelManager : MonoBehaviour
         _sunRotationX = _visualCycleTime * Time.deltaTime;
         LightSource.transform.Rotate(new Vector3(_sunRotationX, 0.0f, 0.0f), Space.World);
     }
-
-    private void TintSkyBox()
-    {
-
-        // work out what colour to return between black and the lightest colour of the skybox
-        // then set the skybox to that colour, this is based off of the day night cycle
-
-
-        // These parts work but require a method to work out the right colour that is
-        // not yet implemented
-        //lightColour = Color.Lerp(Color.black, lightestColour, 1);
-        //RenderSettings.skybox.SetColor("_Tint", lightColour);
-        //LightSource.color = lightColour;
-        //RenderSettings.ambientLight = lightColour;
-
-    }
-
 }

@@ -9,8 +9,7 @@ public class LightCollection : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            gameObject.SetActive(false);
-
+            Destroy(gameObject);
         }
     }
 
