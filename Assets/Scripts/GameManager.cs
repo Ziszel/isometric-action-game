@@ -8,8 +8,6 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
-
     [Header("Buttons")]
     public Button playBtn;
     public Button infoBtn;
@@ -39,9 +37,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
         soundOn = true;
         Language = "EN";
         var text = playBtn.GetComponentInChildren<Text>();

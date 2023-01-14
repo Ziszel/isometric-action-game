@@ -14,6 +14,7 @@ public class LevelManager : MonoBehaviour
     public bool playerHasFlower;
     public int bottlesCollected;
     public Light LightSource;
+    public AudioSource backgroundMusic;
     public AudioSource bottlePickupAudio;
     public AudioSource playerDeathAudio;
     private Cycle _cycle;
@@ -40,6 +41,15 @@ public class LevelManager : MonoBehaviour
         _visualCycleTime = 20.0f;
         _cycleTimer = 10.0f;
         bottlesCollected = 0;
+
+        if (GameManager.soundOn)
+        {
+            backgroundMusic.Play();
+        }
+        else
+        {
+            backgroundMusic.Stop();
+        }
     }
 
     // Update is called once per frame

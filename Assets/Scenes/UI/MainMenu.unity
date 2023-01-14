@@ -1264,6 +1264,7 @@ MonoBehaviour:
   playBtnText: {fileID: 349330818}
   infoBtnText: {fileID: 1703101314}
   InfoScreenText: {fileID: 1828239977}
+  music: {fileID: 1183175068}
   ghost: {fileID: 2109746408}
 --- !u!4 &1183175067
 Transform:
