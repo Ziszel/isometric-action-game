@@ -6,14 +6,16 @@ public class MainCamera : MonoBehaviour
     public Player player;
     public Camera mainCamera;
     private Vector2 _mousePosition;
+    [Header("Set speed to 20.0f for WebGL export!")]
+    [SerializeField] private float _rotationSpeed = 40.0f;
     private float _pitch = 0.0f;
-    private readonly float _rotationSpeed = 5.0f;
     private readonly float _friction = 0.96f;
     private readonly int _defaultFov = 60; // The FOV when not moving
     private readonly int _maxFov = 95; // the max FOV value
     private readonly float _zoomFactor = 0.8f; // controls how much the FOV will change when the player moves
     private readonly float _cameraShakeMagnitude = 0.2f;
     private float _shakeTimer;
+    private float _dampenMouse = 0.5f;
     
 
     private Vector3 _offset;
@@ -33,8 +35,12 @@ public class MainCamera : MonoBehaviour
         // Get the mouse in a similar way to buttons/keys and set the pitch relevant to the movement of the mouse
         // Mouse sensitivity feels different in WebGL compared to editor, this is a long standing Unity bug:
         // https://forum.unity.com/threads/mouse-sensitivity-in-webgl-way-too-sensitive.411574/#post-3421405
-        // NOT IMPLEMENTED CURRENTLY, Mouse slows too fast, feels bad. Need to look into this later.
-        _pitch += _rotationSpeed * Input.GetAxis("Mouse X");
+        _pitch = Input.GetAxis("Mouse X");
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            if (Mathf.Abs(_pitch) > 1.0f) { _pitch = Mathf.Lerp(_pitch, Mathf.Sign (_pitch), _dampenMouse); }
+        }
+        _pitch *= _rotationSpeed;
 
         // Update the camera position to track the player, and rotate around the player
         transform.position = (player.transform.position + _offset);
